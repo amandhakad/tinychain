@@ -485,9 +485,10 @@ CHAIN_PATH = os.environ.get('TC_CHAIN_PATH', 'chain.dat')
 
 @with_lock(chain_lock)
 def save_to_disk():
-    with open(CHAIN_PATH, "wb") as f:
+    with open(CHAIN_PATH+".tmp", "wb") as f:
         logger.info(f"saving chain with {len(active_chain)} blocks")
         f.write(encode_socket_data(list(active_chain)))
+    os.rename(CHAIN_PATH+".tmp", CHAIN_PATH)
 
 @with_lock(chain_lock)
 def load_from_disk():
